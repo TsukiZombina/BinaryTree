@@ -38,42 +38,31 @@ int main(){
  
     /* delete node */
     int comparison;
-    do
-    {
-        printf("Enter key to remove, (-1 to exit):");
-        scanf("%d", &comparison);
-        if(comparison == -1)
-            break;
-        root = delete_node(root, comparison);
-        if(root != NULL)
-            print_tree(root);
-        else
-            break;
-    }
-    while(root != NULL);
+    printf("Write a key for a node to delete: ");
+    scanf("%d", &comparison);
+
+    root = delete_node(root, comparison);
+    if(root != NULL)
+        print_tree(root);
  
     /* search for a node */
     int key = 0;
     Node *s;
-    while(key != -1)
+    printf("Write a key for a node to search in BST: ");
+    scanf("%d",&key);
+    s = search(root, key);
+    if(s != NULL)
     {
-        printf("Enter key to search (-1 to exit):");
-        scanf("%d",&key);
- 
-        s = search(root, key);
-        if(s != NULL)
-        {
-            printf("Found it %d",s->key);
-            if(s->lchild != NULL)
-                printf("(L: %d)",s->lchild->key);
-            if(s->rchild != NULL)
-                printf("(R: %d)",s->rchild->key);
-            printf("\n");
-        }
-        else
-        {
-            printf("Node %d not found\n",key);
-        }
+        printf("Found it %d",s->key);
+        if(s->lchild != NULL)
+            printf("(L: %d)",s->lchild->key);
+        if(s->rchild != NULL)
+            printf("(R: %d)",s->rchild->key);
+        printf("\n");
+    }
+    else
+    {
+        printf("Node %d not found\n",key);
     }
  
     /* delete the whole tree */
