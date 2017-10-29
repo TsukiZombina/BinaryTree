@@ -13,9 +13,9 @@ typedef int (*comparer)(int, int);
 
 int compare(int,int);
 Node* create_node(int);
-Node* insert_node(Node*, comparer, int);
-Node* delete_node(Node*, comparer, int);
-Node* search(Node*, comparer, const int);
+Node* insert_node(Node*, int);
+Node* delete_node(Node*, int);
+Node* search(Node*, const int);
 void inorder_travesal(Node*);
 void delete(Node*);
 void print_node(Node*);
@@ -31,7 +31,7 @@ int main(){
     for(int i = 0; i < SIZE; i++)
     {
         printf("%d ",a[i]);
-        root = insert_node(root, comp, a[i]);
+        root = insert_node(root, a[i]);
     }
     printf("\n");
     print_tree(root);
@@ -44,7 +44,7 @@ int main(){
         scanf("%d", &comparison);
         if(comparison == -1)
             break;
-        root = delete_node(root, comp, comparison);
+        root = delete_node(root, comparison);
         if(root != NULL)
             print_tree(root);
         else
@@ -60,7 +60,7 @@ int main(){
         printf("Enter key to search (-1 to exit):");
         scanf("%d",&key);
  
-        s = search(root, comp, key);
+        s = search(root, key);
         if(s != NULL)
         {
             printf("Found it %d",s->key);
@@ -106,7 +106,7 @@ Node* create_node(int k){
     return node;
 }
 
-Node* insert_node(Node* node, comparer compare, int key)
+Node* insert_node(Node* node, int key)
 {
     //
     if(node == NULL)
@@ -141,7 +141,7 @@ Node* insert_node(Node* node, comparer compare, int key)
     return node;
 }
 
-Node* delete_node(Node* node, comparer compare, int key)
+Node* delete_node(Node* node, int key)
 {
     //no node
     if(node == NULL)
@@ -149,23 +149,23 @@ Node* delete_node(Node* node, comparer compare, int key)
     Node* current;
     int comparison = compare(key, node->key);
     
-    //no children (leaf)
     if(comparison < 0)
-        node->lchild = delete_node(node->lchild, compare, key);
+        node->lchild = delete_node(node->lchild, key);
     else if(comparison > 0)
-        node->rchild = delete_node(node->rchild, compare, key);
+        node->rchild = delete_node(node->rchild, key);
     else
     {
-        //1 child
         if (node->lchild == NULL)
         {
             current = node->rchild;
             free(node);
+            node = NULL;
         }
         else if (node->rchild == NULL)
         {
             current = node->lchild;
             free(node);
+            node = NULL;
         }
         //2 children
         else
@@ -180,15 +180,15 @@ Node* delete_node(Node* node, comparer compare, int key)
             }
             node->key = current->key;
             if (parent != NULL)
-                parent->lchild = delete_node(parent->lchild, compare, parent->lchild->key);
+                parent->lchild = delete_node(parent->lchild, parent->lchild->key);
             else
-                node->rchild = delete_node(node->rchild, compare, node->rchild->key);
+                node->rchild = delete_node(node->rchild, node->rchild->key);
         }
     }
     return node;
 }
 
-Node* search(Node* node, comparer compare, const int key)
+Node* search(Node* node, const int key)
 {
     if(node == NULL)
         return NULL;
